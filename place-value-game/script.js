@@ -6,6 +6,8 @@ let currentDigitIndex = -1;
 let remainingDigits = [];
 let timeLeft = 30;
 let timerInterval;
+let currentGameMode = 'place-value';
+let currentMathProblem = {};
 
 // DOM elements
 const numberDisplay = document.getElementById('number-display');
@@ -16,9 +18,20 @@ const ones = document.getElementById('ones');
 const nextButton = document.getElementById('next-button');
 const scoreDisplay = document.getElementById('score');
 const messageDisplay = document.getElementById('message');
+const mathAnswerInput = document.getElementById('math-answer');
+
+// Add/Subtract mode elements
+const startHundreds = document.getElementById('start-hundreds');
+const startTens = document.getElementById('start-tens');
+const startOnes = document.getElementById('start-ones');
+const answerHundreds = document.getElementById('answer-hundreds');
+const answerTens = document.getElementById('answer-tens');
+const answerOnes = document.getElementById('answer-ones');
+const operationDisplay = document.getElementById('operation-display');
 
 const digitBoxes = [thousands, hundreds, tens, ones];
 const placeNames = ['thousands', 'hundreds', 'tens', 'ones'];
+const answerBoxes = [answerHundreds, answerTens, answerOnes];
 
 // Initialize the game
 function initGame() {
@@ -119,7 +132,15 @@ function setupEventListeners() {
         });
     });
 
-    nextButton.addEventListener('click', generateNewNumber);
+    nextButton.addEventListener('click', () => {
+        if (currentGameMode === 'place-value') {
+            generateNewNumber();
+        } else {
+            displayMathProblem();
+            startTimer();
+            nextButton.disabled = true;
+        }
+    });
 }
 
 // Check the player's answer
@@ -303,5 +324,221 @@ function animateSquishmellow(type) {
     }, 2000);
 }
 
+// Add/Subtract Game Mode Functions
+function generateBoundaryNumber() {
+    // Numbers near hundred boundaries (100, 200, 300, etc.)
+    const boundaries = [100, 200, 300, 400, 500, 600, 700, 800, 900];
+    const selectedBoundary = boundaries[Math.floor(Math.random() * boundaries.length)];
+    
+    // Generate a number within ±10 of the boundary
+    const offset = Math.floor(Math.random() * 21) - 10; // -10 to +10
+    return selectedBoundary + offset;
+}
+
+function generateMathProblem() {
+    const startNumber = generateBoundaryNumber();
+    const operations = [
+        { value: 1, text: '+1' },
+        { value: -1, text: '-1' },
+        { value: 10, text: '+10' },
+        { value: -10, text: '-10' },
+        { value: 100, text: '+100' },
+        { value: -100, text: '-100' }
+    ];
+    
+    const operation = operations[Math.floor(Math.random() * operations.length)];
+    const answer = startNumber + operation.value;
+    
+    // Make sure answer is positive and reasonable
+    if (answer < 0 || answer > 999) {
+        return generateMathProblem(); // Regenerate if out of bounds
+    }
+    
+    return {
+        startNumber: startNumber,
+        operation: operation.text,
+        operationValue: operation.value,
+        answer: answer
+    };
+}
+
+function displayMathProblem() {
+    currentMathProblem = generateMathProblem();
+    
+    // Display the starting number in place value columns
+    const startStr = currentMathProblem.startNumber.toString().padStart(3, '0');
+    startHundreds.textContent = startStr[0];
+    startTens.textContent = startStr[1];
+    startOnes.textContent = startStr[2];
+    
+    // Display the operation
+    operationDisplay.textContent = currentMathProblem.operation;
+    
+    // Clear and enable answer inputs
+    answerBoxes.forEach(box => {
+        box.value = '';
+        box.classList.remove('correct', 'wrong');
+        box.disabled = false;
+    });
+    
+    // Focus on first answer box
+    answerHundreds.focus();
+}
+
+function checkMathAnswer() {
+    // Get user's answer from the three inputs
+    const userHundreds = answerHundreds.value || '0';
+    const userTens = answerTens.value || '0';
+    const userOnes = answerOnes.value || '0';
+    const userAnswer = parseInt(userHundreds + userTens + userOnes);
+    
+    // Get correct answer digits
+    const correctAnswerStr = currentMathProblem.answer.toString().padStart(3, '0');
+    
+    // Check each digit individually
+    let allCorrect = true;
+    
+    if (userHundreds === correctAnswerStr[0]) {
+        answerHundreds.classList.add('correct');
+        answerHundreds.classList.remove('wrong');
+    } else {
+        answerHundreds.classList.add('wrong');
+        answerHundreds.classList.remove('correct');
+        allCorrect = false;
+    }
+    
+    if (userTens === correctAnswerStr[1]) {
+        answerTens.classList.add('correct');
+        answerTens.classList.remove('wrong');
+    } else {
+        answerTens.classList.add('wrong');
+        answerTens.classList.remove('correct');
+        allCorrect = false;
+    }
+    
+    if (userOnes === correctAnswerStr[2]) {
+        answerOnes.classList.add('correct');
+        answerOnes.classList.remove('wrong');
+    } else {
+        answerOnes.classList.add('wrong');
+        answerOnes.classList.remove('correct');
+        allCorrect = false;
+    }
+    
+    if (allCorrect) {
+        score += 10;
+        scoreDisplay.textContent = score;
+        messageDisplay.textContent = '🎉 Correct! Great job!';
+        messageDisplay.className = 'success';
+        
+        // Animate squishmellow
+        animateSquishmellow('correct');
+        
+        stopTimer();
+        nextButton.disabled = false;
+        answerBoxes.forEach(box => box.disabled = true);
+    } else {
+        messageDisplay.textContent = '😕 Try again! Check each place value.';
+        messageDisplay.className = 'error';
+        
+        setTimeout(() => {
+            answerBoxes.forEach(box => {
+                if (box.classList.contains('wrong')) {
+                    box.value = '';
+                    box.classList.remove('wrong');
+                }
+            });
+            // Focus on first wrong box
+            if (answerHundreds.value === '' || answerHundreds.classList.contains('wrong')) {
+                answerHundreds.focus();
+            } else if (answerTens.value === '' || answerTens.classList.contains('wrong')) {
+                answerTens.focus();
+            } else {
+                answerOnes.focus();
+            }
+        }, 500);
+    }
+}
+
+// Game Mode Switching
+function switchGameMode(mode) {
+    currentGameMode = mode;
+    
+    // Update button states
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.mode === mode) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Show/hide appropriate game mode
+    document.getElementById('place-value-mode').classList.remove('active');
+    document.getElementById('add-subtract-mode').classList.remove('active');
+    
+    if (mode === 'place-value') {
+        document.getElementById('place-value-mode').classList.add('active');
+        generateNewNumber();
+    } else {
+        document.getElementById('add-subtract-mode').classList.add('active');
+        displayMathProblem();
+        startTimer();
+    }
+    
+    // Reset score and message
+    score = 0;
+    scoreDisplay.textContent = score;
+    messageDisplay.textContent = '';
+    nextButton.disabled = true;
+}
+
 // Start the game when the page loads
-window.addEventListener('load', initGame);
+window.addEventListener('load', () => {
+    initGame();
+    
+    // Add event listeners for game mode buttons
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            switchGameMode(btn.dataset.mode);
+        });
+    });
+    
+    // Add event listener for math answer input
+    if (mathAnswerInput) {
+        mathAnswerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkMathAnswer();
+            }
+        });
+    }
+    
+    // Add event listeners for place value answer boxes
+    answerBoxes.forEach((box, index) => {
+        // Only allow numbers
+        box.addEventListener('keypress', (e) => {
+            if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+            }
+        });
+        
+        // Auto-move to next box and check when filled
+        box.addEventListener('input', (e) => {
+            if (e.target.value) {
+                // Move to next box
+                if (index < answerBoxes.length - 1) {
+                    answerBoxes[index + 1].focus();
+                } else {
+                    // All boxes filled, check answer
+                    checkMathAnswer();
+                }
+            }
+        });
+        
+        // Handle backspace to move to previous box
+        box.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                answerBoxes[index - 1].focus();
+            }
+        });
+    });
+});

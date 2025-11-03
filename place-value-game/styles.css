@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif, book;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     background-color: #f0f7ff;
     color: #333;
 }
@@ -24,6 +24,37 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Game mode selector */
+.game-mode-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    padding: 12px 24px;
+    font-size: 1.1em;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    border: 2px solid #bdc3c7;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.mode-btn:hover {
+    background-color: #d5dbdb;
+    transform: translateY(-2px);
+}
+
+.mode-btn.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
 .score-container {
     font-size: 1.5em;
     color: #27ae60;
@@ -37,6 +68,15 @@ h1 {
     padding: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     min-height: 500px;
+}
+
+/* Game mode containers */
+.game-mode {
+    display: none;
+}
+
+.game-mode.active {
+    display: block;
 }
 
 #number-display {
@@ -395,4 +435,144 @@ button:disabled {
     height: 3px;
     margin-top: 5px;
     border-radius: 10px;
+}
+
+/* Add/Subtract Mode Styles */
+.place-value-display {
+    margin: 40px auto;
+    max-width: 400px;
+}
+
+.place-value-header {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.pv-label {
+    font-size: 1.3em;
+    color: #7f8c8d;
+    font-weight: bold;
+    width: 100px;
+    text-align: center;
+}
+
+.place-value-row {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.pv-digit {
+    width: 100px;
+    height: 100px;
+    border: 3px solid #3498db;
+    border-radius: 10px;
+    font-size: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.operation-display {
+    font-size: 2em;
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    min-height: 50px;
+}
+
+.answer-row {
+    border-top: 3px solid #2c3e50;
+    padding-top: 20px;
+}
+
+.pv-answer {
+    width: 100px;
+    height: 100px;
+    border: 3px solid #3498db;
+    border-radius: 10px;
+    font-size: 3em;
+    text-align: center;
+    outline: none;
+    font-family: inherit;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.pv-answer:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+    transform: scale(1.05);
+}
+
+.pv-answer.correct {
+    border-color: #2ecc71;
+    background-color: #d5f5e3;
+}
+
+.pv-answer.wrong {
+    border-color: #e74c3c;
+    background-color: #fadbd8;
+}
+
+/* Remove spinner buttons */
+.pv-answer::-webkit-inner-spin-button,
+.pv-answer::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#math-problem {
+    font-size: 2.5em;
+    margin: 30px 0;
+    color: #2c3e50;
+    font-weight: bold;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.answer-input-container {
+    margin: 30px 0;
+}
+
+.math-input {
+    width: 200px;
+    height: 80px;
+    font-size: 2em;
+    text-align: center;
+    border: 3px solid #3498db;
+    border-radius: 10px;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.math-input:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+    transform: scale(1.05);
+}
+
+.math-input.correct {
+    border-color: #2ecc71;
+    background-color: #d5f5e3;
+}
+
+.math-input.wrong {
+    border-color: #e74c3c;
+    background-color: #fadbd8;
+}
+
+/* Remove spinner buttons from number inputs */
+.math-input::-webkit-inner-spin-button,
+.math-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
