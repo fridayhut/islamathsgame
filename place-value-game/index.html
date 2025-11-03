@@ -8,7 +8,14 @@
 </head>
 <body>    <div class="confetti-container"></div>
     <div class="container">
-        <h1>Place Value Adventure! 🎮</h1>        <div class="game-header">
+        <h1>Place Value Adventure! 🎮</h1>
+        
+        <div class="game-mode-selector">
+            <button class="mode-btn active" data-mode="place-value">Place Value</button>
+            <button class="mode-btn" data-mode="add-subtract">Add & Subtract</button>
+        </div>
+        
+        <div class="game-header">
             <div class="score-container">Score: <span id="score">0</span></div>
             <div class="timer-container">Time: <span id="timer">20</span>s</div>
         </div>
@@ -19,7 +26,10 @@
                     <div class="mouth"></div>
                 </div>
             </div>
-            <div id="number-display"></div>            <div class="place-values">
+            
+            <!-- Place Value Mode -->
+            <div id="place-value-mode" class="game-mode active">
+                <div id="number-display"></div>            <div class="place-values">
                 <div class="place-value-box">
                     <input type="text" class="digit-box" id="thousands" maxlength="1" inputmode="numeric" pattern="[0-9]">
                     <div class="label">Thousands</div>
@@ -36,7 +46,32 @@
                     <input type="text" class="digit-box" id="ones" maxlength="1" inputmode="numeric" pattern="[0-9]">
                     <div class="label">Ones</div>
                 </div>
-            </div>            <div class="controls">
+            </div>
+            </div>
+            
+            <!-- Add/Subtract Mode -->
+            <div id="add-subtract-mode" class="game-mode">
+                <div class="place-value-display">
+                    <div class="place-value-header">
+                        <div class="pv-label">Hundreds</div>
+                        <div class="pv-label">Tens</div>
+                        <div class="pv-label">Ones</div>
+                    </div>
+                    <div class="place-value-row">
+                        <div class="pv-digit" id="start-hundreds"></div>
+                        <div class="pv-digit" id="start-tens"></div>
+                        <div class="pv-digit" id="start-ones"></div>
+                    </div>
+                    <div class="operation-display" id="operation-display"></div>
+                    <div class="place-value-row answer-row">
+                        <input type="text" class="pv-answer" id="answer-hundreds" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pv-answer" id="answer-tens" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pv-answer" id="answer-ones" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
                 <button id="next-button">Next Number</button>
             </div>
 
