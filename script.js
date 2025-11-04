@@ -4,7 +4,7 @@ let score = 0;
 let isChecked = false;
 let currentDigitIndex = -1;
 let remainingDigits = [];
-let timeLeft = 30;
+let timeLeft = 60;
 let timerInterval;
 let currentGameMode = 'place-value';
 let currentMathProblem = {};
@@ -195,7 +195,7 @@ function checkAnswer() {
 function startTimer() {
     const timerDisplay = document.getElementById('timer');
     const timerContainer = document.querySelector('.timer-container');
-    timeLeft = 30;
+    timeLeft = 60;
     timerDisplay.textContent = timeLeft;
     timerContainer.classList.remove('warning');
     
