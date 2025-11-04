@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Value Adventure!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>    <div class="confetti-container"></div>
+    <div class="container">
+        <h1>Place Value Adventure! 🎮</h1>
+        
+        <div class="game-mode-selector">
+            <button class="mode-btn active" data-mode="place-value">Place Value</button>
+            <button class="mode-btn" data-mode="add-subtract">Add & Subtract</button>
+        </div>
+        
+        <div class="game-header">
+            <div class="score-container">Score: <span id="score">0</span></div>
+            <div class="timer-container">Time: <span id="timer">20</span>s</div>
+        </div>
+          <div class="game-container">
+            <div class="squishmellow">
+                <div class="face">
+                    <div class="eyes"></div>
+                    <div class="mouth"></div>
+                </div>
+            </div>
+            
+            <!-- Place Value Mode -->
+            <div id="place-value-mode" class="game-mode active">
+                <div id="number-display"></div>            <div class="place-values">
+                <div class="place-value-box">
+                    <input type="text" class="digit-box" id="thousands" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    <div class="label">Thousands</div>
+                </div>
+                <div class="place-value-box">
+                    <input type="text" class="digit-box" id="hundreds" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    <div class="label">Hundreds</div>
+                </div>
+                <div class="place-value-box">
+                    <input type="text" class="digit-box" id="tens" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    <div class="label">Tens</div>
+                </div>
+                <div class="place-value-box">
+                    <input type="text" class="digit-box" id="ones" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    <div class="label">Ones</div>
+                </div>
+            </div>
+            </div>
+            
+            <!-- Add/Subtract Mode -->
+            <div id="add-subtract-mode" class="game-mode">
+                <div class="place-value-display">
+                    <div class="place-value-header">
+                        <div class="pv-label">Hundreds</div>
+                        <div class="pv-label">Tens</div>
+                        <div class="pv-label">Ones</div>
+                    </div>
+                    <div class="place-value-row">
+                        <div class="pv-digit" id="start-hundreds"></div>
+                        <div class="pv-digit" id="start-tens"></div>
+                        <div class="pv-digit" id="start-ones"></div>
+                    </div>
+                    <div class="operation-sign" id="operation-sign"></div>
+                    <div class="place-value-row">
+                        <div class="pv-digit" id="op-hundreds"></div>
+                        <div class="pv-digit" id="op-tens"></div>
+                        <div class="pv-digit" id="op-ones"></div>
+                    </div>
+                    <div class="equals-line"></div>
+                    <div class="place-value-row answer-row">
+                        <input type="text" class="pv-answer" id="answer-hundreds" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pv-answer" id="answer-tens" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                        <input type="text" class="pv-answer" id="answer-ones" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="next-button">Next Number</button>
+            </div>
+
+            <div id="message"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
